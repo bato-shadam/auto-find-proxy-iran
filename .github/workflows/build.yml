@@ -16,9 +16,9 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
       - name: Build with PyInstaller
-        run: pyinstaller --noconsole --onefile --name ir_auto_proxy_duck ir_auto_proxy_duck.py
+        run: pyinstaller --noconsole --onefile --name ir_auto_proxy_tray_single ir_auto_proxy_tray_single.py
       - name: Upload EXE
         uses: actions/upload-artifact@v4
         with:
-          name: ir_auto_proxy_duck
-          path: dist/ir_auto_proxy_duck.exe
+          name: ir_auto_proxy_tray_single
+          path: dist/ir_auto_proxy_tray_single.exe
