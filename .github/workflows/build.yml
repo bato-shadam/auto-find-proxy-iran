@@ -1,24 +1,42 @@
-name: Build EXE
+
+name: Build EXE (Windows x64)
 on:
+  workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
+    paths:
+      - 'ir_auto_proxy_tray_single.py'
+      - 'requirements.txt'
+      - '.github/workflows/build.yml'
+
 jobs:
   build:
     runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write
+      actions: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install dependencies
+
+      - name: Install deps
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pyinstaller
-      - name: Build with PyInstaller
-        run: pyinstaller --noconsole --onefile --name ir_auto_proxy_tray_single ir_auto_proxy_tray_single.py
-      - name: Upload EXE
+
+      - name: Build exe
+        run: |
+          pyinstaller --onefile --noconsole --icon=duck_icon.png --name ir_auto_proxy_tray ir_auto_proxy_tray_single.py
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ir_auto_proxy_tray_single
-          path: dist/ir_auto_proxy_tray_single.exe
+          name: IR-Proxy-Tray-EXE
+          path: dist/ir_auto_proxy_tray.exe
